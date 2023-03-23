@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CatalogService.API", "Catal
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatalogService.Core", "CatalogService.Core\CatalogService.Core.csproj", "{4D559681-9106-4A9D-A007-CE3EE152C699}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatalogService.Application", "CatalogService.Application\CatalogService.Application.csproj", "{F55928D3-A156-4784-B827-0C6714949CBC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{4D559681-9106-4A9D-A007-CE3EE152C699}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D559681-9106-4A9D-A007-CE3EE152C699}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D559681-9106-4A9D-A007-CE3EE152C699}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F55928D3-A156-4784-B827-0C6714949CBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F55928D3-A156-4784-B827-0C6714949CBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F55928D3-A156-4784-B827-0C6714949CBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F55928D3-A156-4784-B827-0C6714949CBC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
