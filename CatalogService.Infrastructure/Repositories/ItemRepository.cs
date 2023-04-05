@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CatalogService.Infrastructure.Repositories
 {
-    internal class ItemRepository : IRepository<Item>
+    public class ItemRepository : IRepository<Item>
     {
         private CatalogServiceContext db;
 
@@ -19,10 +19,18 @@ namespace CatalogService.Infrastructure.Repositories
             return db.Items;
         }
 
+        public async Task<IEnumerable<Item>> GetAllAsync() =>
+            await db.Items.ToListAsync();
+
         public Item Get(int id)
         {
-
             return db.Items.Find(id);
+        }
+
+        public async Task<Item> GetAsync(int id)
+        {
+            Item item = await db.Items.FirstOrDefaultAsync(x => x.Id == id);
+            return item;
         }
 
         public void Add(Item item)
@@ -30,9 +38,20 @@ namespace CatalogService.Infrastructure.Repositories
             db.Items.Add(item);
         }
 
+        public async Task AddAsync(Item item)
+        {
+            await db.Items.AddAsync(item);
+        }
+
         public void Update(Item item)
         {
             db.Entry(item).State = EntityState.Modified;
+        }
+
+        public async Task UpdateAsync(Item item)
+        {
+            db.Items.Update(item);
+            await db.SaveChangesAsync();
         }
 
         public void Delete(int id)
@@ -40,6 +59,22 @@ namespace CatalogService.Infrastructure.Repositories
             Item item = db.Items.Find(id);
             if (item != null)
                 db.Items.Remove(item);
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            Item item = db.Items.FirstOrDefault(x => x.Id == id);
+            if (item != null)
+            {
+                db.Items.Remove(item);
+            }
+
+            await db.SaveChangesAsync();
+        }
+
+        public bool Any(int id)
+        {
+            return db.Items.Any(x => x.Id == id);
         }
     }
 }

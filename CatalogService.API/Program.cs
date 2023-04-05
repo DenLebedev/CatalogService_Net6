@@ -1,7 +1,21 @@
+using CatalogService.Application.Interfaces;
+using CatalogService.Core;
+using CatalogService.Infrastructure.EF;
+using CatalogService.Infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddDbContext<CatalogServiceContext>(options =>
+{
+    var connectionString = builder.Configuration.GetConnectionString("MySQLDatabase");
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+});
 
+builder.Services.AddTransient<IUnitOfWork, EFUnitOfWork>();
+//builder.Services.AddScoped<IRepository<Category>, CategoryRepository>();
+//builder.Services.AddScoped<IRepository<Item>, ItemRepository>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

@@ -1,18 +1,19 @@
 ﻿using CatalogService.Core;
 using CatalogService.Application.Interfaces;
 using CatalogService.Infrastructure.EF;
+using Microsoft.EntityFrameworkCore;
 
 namespace CatalogService.Infrastructure.Repositories
 {
-    internal class EFUnitOfWork : IUnitOfWork
+    public class EFUnitOfWork : IUnitOfWork
     {
         private CatalogServiceContext db;
         private CategoryRepository categoryRepository;
         private ItemRepository itemRepository;
 
-        public EFUnitOfWork(string connectionString)
+        public EFUnitOfWork(DbContextOptions<CatalogServiceContext> options)
         {
-            db = new CatalogServiceContext(connectionString);
+            db = new CatalogServiceContext(options);
         }
         public IRepository<Category> Categories
         {
