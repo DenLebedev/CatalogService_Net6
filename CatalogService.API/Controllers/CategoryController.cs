@@ -44,7 +44,7 @@ namespace CatalogService.API.Controllers
         }
 
         [HttpPost("/categories", Name = "AddCategory")]
-        public async Task<ActionResult<CategoryViewModel>> AddAsync(CategoryViewModel categoryViewModel)
+        public async Task<ActionResult<Category>> AddAsync(CategoryViewModel categoryViewModel)
         {
             if (categoryViewModel == null)
             {
@@ -56,17 +56,19 @@ namespace CatalogService.API.Controllers
             await _unitOfWork.Categories.AddAsync(category);
             _logger.LogInformation($"New category added: {category.Name}");
 
-            return Ok(categoryViewModel);
+            return Ok(category);
         }
 
         [HttpPut("/categories", Name = "UpdateCategory")]
-        public async Task<ActionResult<Category>> UpdateAsync(Category category) 
+        public async Task<ActionResult<Category>> UpdateAsync(CategoryUpdateViewModel updateViewModel) 
         {
-            if (category == null)
+            if (updateViewModel == null)
             {
                 _logger.LogError("There is no category to update");
                 return BadRequest(string.Empty);
             }
+
+            Category category = _mapper.Map<Category>(updateViewModel);
             if (!_unitOfWork.Categories.Any(category.Id))
             {
                 _logger.LogInformation("The category for updating was not found in the Database");
@@ -74,15 +76,15 @@ namespace CatalogService.API.Controllers
             }
 
             await _unitOfWork.Categories.UpdateAsync(category);
-            _logger.LogInformation($"New category added: {category.Name}");
+            _logger.LogInformation($"Category - {category.Name} updated.");
 
             return Ok(category);
         }
 
-        [HttpDelete("/categories", Name = "UpdateCategory")]
+        [HttpDelete("/categories", Name = "DeleteCategory")]
         public async Task<ActionResult<Category>> DeleteAsync(int id)
         {
-            Category category = _unitOfWork.Categories.Get(id);
+            Category category = await _unitOfWork.Categories.GetAsync(id);
             if(category == null)
             {
                 _logger.LogInformation("The category to delete was not found");

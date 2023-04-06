@@ -9,6 +9,7 @@ namespace CatalogService.API.MappingConfiguration
         public CategoryProfile()
         {
             CreateMap<CategoryViewModel, Category>();
+            CreateMap<CategoryUpdateViewModel, Category>();
         }
     }
 }

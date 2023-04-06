@@ -14,18 +14,8 @@ namespace CatalogService.Infrastructure.Repositories
             this.db = context;
         }
 
-        public IEnumerable<Item> GetAll()
-        {
-            return db.Items;
-        }
-
         public async Task<IEnumerable<Item>> GetAllAsync() =>
             await db.Items.ToListAsync();
-
-        public Item Get(int id)
-        {
-            return db.Items.Find(id);
-        }
 
         public async Task<Item> GetAsync(int id)
         {
@@ -33,32 +23,16 @@ namespace CatalogService.Infrastructure.Repositories
             return item;
         }
 
-        public void Add(Item item)
-        {
-            db.Items.Add(item);
-        }
-
         public async Task AddAsync(Item item)
         {
-            await db.Items.AddAsync(item);
-        }
-
-        public void Update(Item item)
-        {
-            db.Entry(item).State = EntityState.Modified;
+            db.Items.Add(item);
+            await db.SaveChangesAsync();
         }
 
         public async Task UpdateAsync(Item item)
         {
             db.Items.Update(item);
             await db.SaveChangesAsync();
-        }
-
-        public void Delete(int id)
-        {
-            Item item = db.Items.Find(id);
-            if (item != null)
-                db.Items.Remove(item);
         }
 
         public async Task DeleteAsync(int id)
