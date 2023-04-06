@@ -4,8 +4,9 @@ namespace CatalogService.Application.Interfaces
 {
     public interface IUnitOfWork : IDisposable
     {
-        IRepository<Category> Categories { get; }
-        IRepository<Item> Items { get; }
+        IRepositoryBase<Category> Categories { get; }
+        //IRepositoryBase<Item> Items { get; }
+        IItemRepository Items { get; }
         void Save();
     }
 }

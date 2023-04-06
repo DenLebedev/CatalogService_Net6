@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using CatalogService.Application.Interfaces;
+using CatalogService.Application.Parameters;
 using CatalogService.Application.ViewModels;
 using CatalogService.Core;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace CatalogService.API.Controllers
 {
@@ -29,6 +31,26 @@ namespace CatalogService.API.Controllers
             }
 
             return new ObjectResult(item);
+        }
+
+        [HttpGet("~/itemspaginator", Name = "GetAllItemsPaginator")]
+        public async Task<PagedList<Item>> GetAllAsync([FromQuery] ItemParameters itemParameters)
+        {
+            var item = await _unitOfWork.Items.GetAllAsync(itemParameters);
+            var metadata = new
+            {
+                item.TotalCount,
+                item.PageSize,
+                item.CurrentPage,
+                item.TotalPages,
+                item.HasNext,
+                item.HasPrevious
+            };
+
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+            _logger.LogInformation("All companies fetched from the database");
+
+            return item;
         }
 
         [HttpGet("/items", Name = "GetAllItems")]

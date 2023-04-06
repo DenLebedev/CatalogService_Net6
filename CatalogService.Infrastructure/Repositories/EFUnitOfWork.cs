@@ -15,7 +15,7 @@ namespace CatalogService.Infrastructure.Repositories
         {
             db = new CatalogServiceContext(options);
         }
-        public IRepository<Category> Categories
+        public IRepositoryBase<Category> Categories
         {
             get
             {
@@ -25,7 +25,7 @@ namespace CatalogService.Infrastructure.Repositories
             }
         }
 
-        public IRepository<Item> Items
+        public IItemRepository Items
         {
             get
             {

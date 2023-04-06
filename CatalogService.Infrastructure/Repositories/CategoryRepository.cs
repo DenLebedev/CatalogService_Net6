@@ -2,10 +2,12 @@
 using CatalogService.Application.Interfaces;
 using CatalogService.Infrastructure.EF;
 using Microsoft.EntityFrameworkCore;
+using CatalogService.Application.Parameters;
+using System.Linq;
 
 namespace CatalogService.Infrastructure.Repositories
 {
-    public class CategoryRepository : IRepository<Category>
+    public class CategoryRepository : IRepositoryBase<Category>
     {
         private CatalogServiceContext db;
 
@@ -14,9 +16,10 @@ namespace CatalogService.Infrastructure.Repositories
             this.db = context;
         }
 
-        public async Task<IEnumerable<Category>> GetAllAsync() =>
-            await db.Categories.ToListAsync();
-
+        public async Task<IEnumerable<Category>> GetAllAsync()
+        {
+            return await db.Categories.ToListAsync();
+        }
 
         public async Task<Category> GetAsync(int id)
         {

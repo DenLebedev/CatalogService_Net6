@@ -1,11 +1,12 @@
 ﻿using CatalogService.Application.Interfaces;
+using CatalogService.Application.Parameters;
 using CatalogService.Core;
 using CatalogService.Infrastructure.EF;
 using Microsoft.EntityFrameworkCore;
 
 namespace CatalogService.Infrastructure.Repositories
 {
-    public class ItemRepository : IRepository<Item>
+    public class ItemRepository : IRepositoryBase<Item>, IItemRepository
     {
         private CatalogServiceContext db;
 
@@ -14,8 +15,20 @@ namespace CatalogService.Infrastructure.Repositories
             this.db = context;
         }
 
-        public async Task<IEnumerable<Item>> GetAllAsync() =>
-            await db.Items.ToListAsync();
+        public async Task<PagedList<Item>> GetAllAsync(ItemParameters itemParameters)
+        {
+            var items = await db.Items.ToListAsync();
+
+            return PagedList<Item>.ToPagedList(
+                items.OrderBy(on => on.Name).ToList(),
+                itemParameters.PageNumber,
+                itemParameters.PageSize);
+        }
+
+        public async Task<IEnumerable<Item>> GetAllAsync()
+        {
+            return await db.Items.ToListAsync();
+        }
 
         public async Task<Item> GetAsync(int id)
         {

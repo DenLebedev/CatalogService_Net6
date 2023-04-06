@@ -1,6 +1,9 @@
-﻿namespace CatalogService.Application.Interfaces
+﻿using CatalogService.Application.Parameters;
+using System.Runtime.InteropServices;
+
+namespace CatalogService.Application.Interfaces
 {
-    public interface IRepository<T> where T : class
+    public interface IRepositoryBase<T> where T : class
     {
         Task<IEnumerable<T>> GetAllAsync();
         Task<T> GetAsync(int id);
