@@ -18,9 +18,10 @@ namespace CatalogService.Infrastructure.Repositories
         public async Task<PagedList<Item>> GetAllAsync(ItemParameters itemParameters)
         {
             var items = await db.Items.ToListAsync();
+            var itemsByCategoryId = items.Where(i => i.CategoryId == itemParameters.ItemsCategoryId).ToList();
 
             return PagedList<Item>.ToPagedList(
-                items.OrderBy(on => on.Name).ToList(),
+                itemsByCategoryId.OrderBy(on => on.Name).ToList(),
                 itemParameters.PageNumber,
                 itemParameters.PageSize);
         }

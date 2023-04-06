@@ -6,21 +6,8 @@ using System.Threading.Tasks;
 
 namespace CatalogService.Application.Parameters
 {
-    public class ItemParameters
+    public class ItemParameters :QueryItemParameters
     {
-        const int maxPageSize = 20;
-        public int PageNumber { get; set; } = 1;
-        private int _pageSize = 5;
-        public int PageSize
-        {
-            get
-            {
-                return _pageSize;
-            }
-            set
-            {
-                _pageSize = (value > maxPageSize) ? maxPageSize : value;
-            }
-        }
+        public uint ItemsCategoryId { get; set; }
     }
 }
