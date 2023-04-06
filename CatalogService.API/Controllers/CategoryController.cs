@@ -1,4 +1,6 @@
+using AutoMapper;
 using CatalogService.Application.Interfaces;
+using CatalogService.Application.ViewModels;
 using CatalogService.Core;
 using Microsoft.AspNetCore.Mvc;
 using NuGet.Protocol.Core.Types;
@@ -9,19 +11,21 @@ namespace CatalogService.API.Controllers
     [Route("[controller]")]
     public class CategoryController : ControllerBase
     {
+        private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<CategoryController> _logger;
 
-        public CategoryController(ILogger<CategoryController> logger, IUnitOfWork unitOfWork)
+        public CategoryController(IMapper mapper, ILogger<CategoryController> logger, IUnitOfWork unitOfWork)
         {
+            _mapper = mapper;
             _logger = logger;
             _unitOfWork = unitOfWork;
         }
 
-        [HttpGet("GetCategoryAsync")]
+        [HttpGet("/categories/{categoryId}", Name = "GetCategoryById")]
         public async Task<ActionResult<Category>> GetAsync(int categoryId)
         {
-            var category = _unitOfWork.Categories.GetAsync(categoryId);
+            var category = await _unitOfWork.Categories.GetAsync(categoryId);
             if (category == null)
             {
                 return NotFound();
@@ -30,7 +34,7 @@ namespace CatalogService.API.Controllers
             return new ObjectResult(category);
         }
 
-        [HttpGet("GetAllCategoriesAsync")]
+        [HttpGet("/categories", Name = "GetAllCategories")]
         public async Task<IEnumerable<Category>> GetAllAsync()
         {
             var categories = await _unitOfWork.Categories.GetAllAsync();
@@ -39,22 +43,23 @@ namespace CatalogService.API.Controllers
             return categories;
         }
 
-        [HttpPost]
-        public async Task<ActionResult<Category>> AddAsync(Category category)
+        [HttpPost("/categories", Name = "AddCategory")]
+        public async Task<ActionResult<CategoryViewModel>> AddAsync(CategoryViewModel categoryViewModel)
         {
-            if (category == null)
+            if (categoryViewModel == null)
             {
-                
                 return BadRequest(string.Empty);
             }
+
+            Category category = _mapper.Map<Category>(categoryViewModel);
 
             await _unitOfWork.Categories.AddAsync(category);
             _logger.LogInformation($"New category added: {category.Name}");
 
-            return Ok(category);
+            return Ok(categoryViewModel);
         }
 
-        [HttpPut]
+        [HttpPut("/categories", Name = "UpdateCategory")]
         public async Task<ActionResult<Category>> UpdateAsync(Category category) 
         {
             if (category == null)
@@ -74,7 +79,7 @@ namespace CatalogService.API.Controllers
             return Ok(category);
         }
 
-        [HttpDelete]
+        [HttpDelete("/categories", Name = "UpdateCategory")]
         public async Task<ActionResult<Category>> DeleteAsync(int id)
         {
             Category category = _unitOfWork.Categories.Get(id);

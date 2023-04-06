@@ -14,8 +14,7 @@ builder.Services.AddDbContext<CatalogServiceContext>(options =>
 });
 
 builder.Services.AddTransient<IUnitOfWork, EFUnitOfWork>();
-//builder.Services.AddScoped<IRepository<Category>, CategoryRepository>();
-//builder.Services.AddScoped<IRepository<Item>, ItemRepository>();
+builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

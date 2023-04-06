@@ -40,7 +40,8 @@ namespace CatalogService.Infrastructure.Repositories
 
         public async Task AddAsync(Category category)
         {
-            await db.Categories.AddAsync(category);
+            db.Categories.Add(category);
+            await db.SaveChangesAsync();
         }
 
         public void Update(Category category)
